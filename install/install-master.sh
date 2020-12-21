@@ -5,7 +5,7 @@ sudo kubeadm init --cri-socket="unix:///var/run/singularity.sock" \
           --ignore-preflight-errors=all \
           --apiserver-advertise-address="${IPADDR}" \
           --apiserver-cert-extra-sans="${IPADDR}"  \
-          --node-name k8s-master --pod-network-cidr=10.244.0.0/16
+          --node-name wlm-op-master --pod-network-cidr=10.244.0.0/16
 
 mkdir -p ${HOME}/.kube
 sudo cp -i /etc/kubernetes/admin.conf ${HOME}/.kube/config

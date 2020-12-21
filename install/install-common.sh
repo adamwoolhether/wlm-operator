@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 # install dependencies, libs and tools
-sudo yum update -y && \
-sudo yum update -y && \
-     sudo yum groupinstall -y 'Development Tools' && \
+# sudo yum update -y && \
+sudo yum groupinstall -y 'Development Tools' && \
      sudo yum install -y \
      openssl-devel \
      libuuid-devel \
@@ -11,6 +10,10 @@ sudo yum update -y && \
      wget \
      squashfs-tools \
      cryptsetup
+
+# Disable Firewalld and SELinux (FOR TESTING)
+systemctl disable --now firewalld
+sed -i -e s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 
 # install go
 export VERSION=1.13.1 OS=linux ARCH=amd64
@@ -40,11 +43,13 @@ git clone ${SINGULARITY_CRI_REPO} ${HOME}/singularity-cri
 cd ${HOME}/singularity-cri && make && sudo make install
 
 # install wlm-operator
-SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
-git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
+#SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
+#git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
 
 # set up CNI config
 sudo mkdir -p /etc/cni/net.d
+# Mkdir for Calico, Singularity won't create automatically ***HOW TO DO THIS AUTOMATICALL AT STARTUP??
+mkdir -p /var/run/calico
 
 # set up sycri service
 sudo sh -c 'cat > /etc/systemd/system/sycri.service <<EOF
@@ -66,7 +71,7 @@ sudo systemctl status sycri
 # install k8s
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+cat > /etc/yum.repos.d/kubernetes.repo <<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
@@ -74,8 +79,10 @@ enabled=1
 gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-exclude=kubelet kubeadm kubectl
+exclud
+e=kubelet kubeadm kubectl
 EOF
+
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 
@@ -94,5 +101,3 @@ sudo modprobe br_netfilter
 sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 sudo sysctl -w net.ipv4.ip_forward=1
 
-# Mkdir for Calico, Singularity won't create automatically ***HOW TO DO THIS AUTOMATICALL AT STARTUP??
-mkdir -p /var/run/calico
