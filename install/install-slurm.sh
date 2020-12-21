@@ -37,7 +37,7 @@ HOST_NAME=$(hostname)
 export HOST_NAME
 
 sudo -E sh -c 'cat > /etc/slurm/slurm.conf <<EOF
-ControlMachine=${HOST_NAME}
+ControlMachine=wlm-op-master
 AuthType=auth/munge
 CacheGroups=0
 CryptoType=crypto/munge
@@ -59,12 +59,10 @@ MinJobAge=300
 SlurmctldTimeout=120
 SlurmdTimeout=300
 Waittime=0
-
 SchedulerType=sched/backfill
 SchedulerPort=7321
 SelectType=select/linear
-AccountingStorageType=accounting_storage/filetxt
-
+#AccountingStorageType=accounting_storage/filetxt
 AccountingStoreJobComment=YES
 ClusterName=cluster
 JobCompType=jobcomp/filetxt
@@ -75,8 +73,8 @@ SlurmctldDebug=3
 SlurmctldLogFile=/var/log/slurm/slurmctld.log
 SlurmdDebug=3
 SlurmdLogFile=/var/log/slurm/slurmd.log
-NodeName=${HOST_NAME} CPUs=2 State=UNKNOWN
-PartitionName=debug Nodes=${HOST_NAME} Default=YES MaxTime=30 State=UP MaxMemPerNode=512 MaxCPUsPerNode=2 MaxNodes=1
+NodeName=wlm-op-node-1,wlm-op-node-2 CPUs=2 State=UNKNOWN
+PartitionName=debug Nodes=wlm-op-node-1,wlm-op-node-2 Default=YES MaxTime=30 State=UP MaxMemPerNode=512 MaxCPUsPerNode=2 MaxNodes=1
 EOF'
 
 mkdir -p /var/log/slurm

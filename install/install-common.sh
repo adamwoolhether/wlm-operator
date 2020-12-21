@@ -93,3 +93,6 @@ EOF
 sudo modprobe br_netfilter
 sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 sudo sysctl -w net.ipv4.ip_forward=1
+
+# Mkdir for Calico, Singularity won't create automatically ***HOW TO DO THIS AUTOMATICALL AT STARTUP??
+mkdir -p /var/run/calico
