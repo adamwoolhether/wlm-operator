@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 export IPADDR=$(ifconfig VLAN1816 | grep inet | awk '{print $2}'| cut -f2 -d:)
-
 sudo kubeadm init --cri-socket="unix:///var/run/singularity.sock" \
           --ignore-preflight-errors=all \
           --apiserver-advertise-address="${IPADDR}" \

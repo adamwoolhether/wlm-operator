@@ -13,7 +13,8 @@ sudo yum groupinstall -y 'Development Tools' && \
 
 # Disable Firewalld and SELinux (FOR TESTING)
 systemctl disable --now firewalld
-sed -i -e s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 
 # install go
 export VERSION=1.13.1 OS=linux ARCH=amd64
@@ -79,12 +80,10 @@ enabled=1
 gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-exclud
-e=kubelet kubeadm kubectl
+exclude=kubelet kubeadm kubectl
 EOF
 
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-sudo systemctl enable --now kubelet
 
 # configure crictl
 sudo touch /etc/crictl.yaml
