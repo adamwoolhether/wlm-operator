@@ -2,7 +2,7 @@
 
 sudo chmod +x ${HOME}/wlm-operator/install/etc/join.sh 
 sudo ${HOME}/wlm-operator/install/etc/join.sh
-mkdir .kube && cp ${HOME}/wlm-operator/install/etc/config ${HOME}/.kube/config
+mkdir ${HOME}/.kube && cp ${HOME}/wlm-operator/install/etc/config ${HOME}/.kube/config
 
 export IPADDR=$(ifconfig VLAN1816 | grep inet | awk '{print $2}'| cut -f2 -d:)
 sudo -E sh -c 'cat >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf <<EOF

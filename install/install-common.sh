@@ -44,8 +44,8 @@ git clone ${SINGULARITY_CRI_REPO} ${HOME}/singularity-cri
 cd ${HOME}/singularity-cri && make && sudo make install
 
 # install wlm-operator
-#SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
-#git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
+SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
+git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
 
 # set up CNI config
 sudo mkdir -p /etc/cni/net.d
@@ -100,3 +100,5 @@ sudo modprobe br_netfilter
 sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 sudo sysctl -w net.ipv4.ip_forward=1
 
+#NEEDED?
+systemctl enable --now kubelet.service
