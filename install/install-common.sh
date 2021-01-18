@@ -17,7 +17,7 @@ sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 
 # install go
-export VERSION=1.13.1 OS=linux ARCH=amd64
+export VERSION=1.15.6 OS=linux ARCH=amd64
 wget -q -O /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz
 sudo tar -C /usr/local -xzf /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
 rm /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
@@ -49,7 +49,7 @@ git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
 
 # set up CNI config
 sudo mkdir -p /etc/cni/net.d
-# Mkdir for Calico, Singularity won't create automatically ***HOW TO DO THIS AUTOMATICALL AT STARTUP??
+# Mkdir for Calico, Singularity won't create automatically ***HOW TO DO THIS AUTOMATICALLY AT STARTUP??
 mkdir -p /var/run/calico
 
 # set up sycri service

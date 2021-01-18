@@ -2,7 +2,7 @@
 V := @
 
 BIN_DIR := ./bin
-RED_BOX := $(BIN_DIR)/red-box
+RED_BOX := $(BIN_DI1R)/red-box
 
 LDFLAGS = -ldflags "-X main.version=`(git describe  --dirty --always 2>/dev/null || echo "unknown") \
           		| sed -e "s/^v//;s/-/_/g;s/_/-/;s/_/./g"`"
