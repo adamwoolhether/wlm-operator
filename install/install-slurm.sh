@@ -37,7 +37,7 @@ HOST_NAME=$(hostname)
 export HOST_NAME
 
 sudo -E sh -c 'cat > /etc/slurm/slurm.conf <<EOF
-ControlMachine=wlm-op-node-1
+ControlMachine=wlm-node1
 AuthType=auth/munge
 CacheGroups=0
 CryptoType=crypto/munge
@@ -73,8 +73,8 @@ SlurmctldDebug=3
 SlurmctldLogFile=/var/log/slurm/slurmctld.log
 SlurmdDebug=3
 SlurmdLogFile=/var/log/slurm/slurmd.log
-NodeName=wlm-op-node-1,wlm-op-node-2,wlm-op-node-3 CPUs=2 State=UNKNOWN
-PartitionName=debug Nodes=wlm-op-node-1,wlm-op-node-2,wlm-op-node-3 Default=YES MaxTime=30 State=UP MaxMemPerNode=512 MaxCPUsPerNode=2 MaxNodes=1
+NodeName=wlm-node[2-3] CPUs=2 State=UNKNOWN
+PartitionName=debug Nodes=wlm-node[2-3] Default=YES MaxTime=30 State=UP MaxMemPerNode=512 MaxCPUsPerNode=2 MaxNodes=1
 EOF'
 
 mkdir -p /var/log/slurm

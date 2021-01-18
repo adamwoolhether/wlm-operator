@@ -5,7 +5,7 @@ sudo ${HOME}/wlm-operator/install/etc/join.sh
 mkdir ${HOME}/.kube && cp ${HOME}/wlm-operator/install/etc/config ${HOME}/.kube/config
 
 export IPADDR=$(ifconfig VLAN1816 | grep inet | awk '{print $2}'| cut -f2 -d:)
-sudo -E sh -c 'cat >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf <<EOF
+sudo -E sh -c 'cat >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf <<EOF
 Environment="KUBELET_EXTRA_ARGS=--node-ip=${IPADDR}"
 EOF'
 

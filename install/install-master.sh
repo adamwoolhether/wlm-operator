@@ -11,7 +11,7 @@ sudo cp -i /etc/kubernetes/admin.conf ${HOME}/.kube/config
 sudo chown root:root ${HOME}/.kube/config
 cp ${HOME}/.kube/config /root/wlm-operator/install/etc/config
 
-sudo -E sh -c 'cat >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf <<EOF
+sudo -E sh -c 'cat >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf <<EOF
 Environment="KUBELET_EXTRA_ARGS=--node-ip=${IPADDR}"
 EOF'
 

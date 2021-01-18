@@ -25,7 +25,7 @@ rm /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
 # configure environment
 export GOPATH=${HOME}/go
 export PATH=${PATH}:/usr/local/go/bin:${GOPATH}/bin
-mkdir ${GOPATH}
+mkdir "${GOPATH}"
 
 cat >> ~/.bashrc <<EOF
 export GOPATH=${GOPATH}
@@ -35,17 +35,17 @@ EOF
 
 # install singularity
 SINGULARITY_REPO="https://github.com/sylabs/singularity"
-git clone ${SINGULARITY_REPO} ${HOME}/singularity
-cd ${HOME}/singularity && ./mconfig && cd ./builddir &&  make && sudo make install
+git clone ${SINGULARITY_REPO} "${HOME}"/singularity
+cd "${HOME}"/singularity && ./mconfig && cd ./builddir && make && sudo make install
 
 # install singularity-cri
 SINGULARITY_CRI_REPO="https://github.com/sylabs/singularity-cri"
-git clone ${SINGULARITY_CRI_REPO} ${HOME}/singularity-cri
-cd ${HOME}/singularity-cri && make && sudo make install
+git clone ${SINGULARITY_CRI_REPO} "${HOME}"/singularity-cri
+cd "${HOME}"/singularity-cri && make && sudo make install
 
 # install wlm-operator
-SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
-git clone ${SINGULARITY_WLM_OPERATOR_REPO} ${HOME}/wlm-operator
+#SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
+#git clone ${SINGULARITY_WLM_OPERATOR_REPO} "${HOME}"/wlm-operator
 
 # set up CNI config
 sudo mkdir -p /etc/cni/net.d
@@ -84,8 +84,14 @@ exclude=kubelet kubeadm kubectl
 EOF
 
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+sudo touch /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-# configure crictl
+# install and configure crictl
+VERSION="v1.20.0"
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
+sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+rm -f crictl-$VERSION-linux-amd64.tar.gz
+
 sudo touch /etc/crictl.yaml
 sudo chown root:root /etc/crictl.yaml
 cat > /etc/crictl.yaml << EOF
@@ -99,6 +105,10 @@ EOF
 sudo modprobe br_netfilter
 sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 sudo sysctl -w net.ipv4.ip_forward=1
+sudo sh -c 'cat >> /etc/sysctl.d/wlm-setup.conf <<EOF
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.ip_forward=1
+EOF'
 
 #NEEDED?
 systemctl enable --now kubelet.service
