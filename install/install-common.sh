@@ -41,7 +41,7 @@ cd "${HOME}"/singularity && ./mconfig && cd ./builddir && make && sudo make inst
 # install singularity-cri
 SINGULARITY_CRI_REPO="https://github.com/sylabs/singularity-cri"
 git clone ${SINGULARITY_CRI_REPO} "${HOME}"/singularity-cri
-cd "${HOME}"/singularity-cri && make && sudo make install
+cd "${HOME}"/singularity-cri && go mode vendor && make && sudo make install
 
 # install wlm-operator
 #SINGULARITY_WLM_OPERATOR_REPO="https://github.com/sylabs/wlm-operator"
